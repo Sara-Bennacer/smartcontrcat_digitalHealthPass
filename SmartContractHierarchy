@@ -1,0 +1,141 @@
+// SPDX-License-Identifier: MIT
+pragma solidity >=0.4.22;
+
+// Government Smart contract
+
+contract Government {
+
+    address owner = 0x14723A09ACff6D2A60DcdF7aA4AFf308FDDC160C;
+    bytes32 VaccineCenterGuidelines_Hash = '0x00aaff';
+    
+
+modifier OnlyOwner(){
+    require(msg.sender == owner);
+_;
+}
+
+
+//events List
+    event VaccineCenterAddition(address Id, uint256 time);
+    event VaccineCenterWithdrawal(address Id, uint256 time);
+   
+   //Adds the Id of a Ministry of Health
+    function AddVaccineCenter(address Id,uint256 time) OnlyOwner public {
+        emit VaccineCenterAddition(Id,time);
+    }
+   
+    function RevokeVaccineCenter(address Id,uint256 time) OnlyOwner public{
+        emit VaccineCenterWithdrawal(Id, time);
+    }
+}
+
+// Ministry Of Health Smart ontract
+
+
+pragma solidity >=0.4.22;pragma solidity >=0.4.22;
+
+contract MinistryofHealth {
+
+    address public Government = 0x8546083fB6806BAa9b19D4cD7b1Cd96374ED9573;
+    bytes32 public VaccineAwareness_Hash = '0x00aaff';
+    address public owner = 0x4A0593b1514feC7D522b5D4d7E929C3E5364d2dB; 
+    
+modifier OnlyOwner(){
+    require(msg.sender == owner);
+    _;
+}
+
+//events List
+    event VaccineCenterAddition(address Id, uint256 time);
+    event VaccineCenterWithdrawal(address Id, uint256 time);
+   
+    function AddVaccineCenter(address Id,uint256 time) OnlyOwner public {
+        emit VaccineCenterAddition(Id,time);
+    }
+   
+    function RevokeVaccineCenter(address Id,uint256 time) OnlyOwner public{
+        emit VaccineCenterWithdrawal(Id, time);
+    }
+}
+
+// Vaccine Center Smart contract
+
+pragma solidity >=0.4.22;pragma solidity >=0.4.22;
+
+contract VaccineCenter {
+
+    address public MinistryofHealth = 0xD6D50d458D3F94BA123a44deE90592274E3B1142;
+    bytes32 public VaccineInfo_Hash = '0x10baff';//just for testing purposes
+    address public owner = 0x483031A1113AD413F02576BD6abaBFB302140225; //nurse etc
+    
+modifier OnlyOwner(){
+    require(msg.sender == owner);
+    _;
+}
+
+//events List
+    event individualVaccineResultsCompleted(bytes32 IPFShash, address individual, address Id,uint256 time);
+    event individualVaccineAnnouncement(address individual, address Id,uint256 time, string info);
+    
+  function PublishVaccineResults(bytes32 IPFShash, address individual, address Verifier,uint256 time) OnlyOwner public {
+       emit individualVaccineResultsCompleted(IPFShash, individual,  Verifier, time);
+    }
+
+   
+   function PublishUpdates(address individual, address Verifier,uint256 time, string memory info) OnlyOwner public{
+       emit individualVaccineAnnouncement( individual,  Verifier, time, info);
+    }
+}
+
+// Individual Smart contract
+
+pragma solidity >=0.4.22;pragma solidity >=0.4.22;
+
+contract idividualSmartContract {
+
+    
+    address public individual = 0xdD870fA1b7C4700F2BD7f44238821C26f7392148; 
+    enum gender {male, female}
+    gender public g;
+    string public  name;
+    uint256 public DoB;
+    bytes32 public passport_IPFShash;
+    bytes32 public residency_IPFSHash;
+    bytes32 public ID_IPFSHash;
+    string public LastCountryVisitedDetails;
+    bytes32 public LastVaccineCenterVisitDocs;
+    uint256 public LastVaccineDate;
+    
+modifier OnlyOwner(){
+    require(msg.sender == individual);
+    _;
+}
+
+//events List
+    event individdualUpdatedRecord(address individual, address Id, uint256 time, string info);
+    event UpdatedRecordsOfficiallyAttested(address Id, address VaccineCenter, address individual, uint256 time);
+   
+
+  
+constructor() public{ 
+    g = gender.male;
+    name = "Sara";
+    DoB= 19990706;//YearMonthDay
+    passport_IPFShash = 'glzug';
+    residency_IPFSHash = 'bxkirmp';
+    ID_IPFSHash = 'itsldhs';
+    LastVaccineCenterVisitDocs = 'kajdgd';
+    LastVaccineDate = 20200607; //YearMonthDay
+    
+}
+
+    function Updated(uint256 time, address Id, string memory info) OnlyOwner public {
+        emit individdualUpdatedRecord(msg.sender,Id,time,info);
+    }
+   
+   //Attestation delivred by authorized parties 
+   
+    function Attested( address VaccineCenter, address Id, uint256 time)  public{
+        emit UpdatedRecordsOfficiallyAttested(msg.sender, VaccineCenter, Id, time);
+    }
+}

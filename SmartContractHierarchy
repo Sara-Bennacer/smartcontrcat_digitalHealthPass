@@ -29,12 +29,12 @@ _;
     }
 }
 
-// Ministry Of Health Smart ontract
+// HealthcareProvider Smrat contract
 
 
 pragma solidity >=0.4.22;pragma solidity >=0.4.22;
 
-contract MinistryofHealth {
+contract HealthcareProvider {
 
     address public Government = 0x8546083fB6806BAa9b19D4cD7b1Cd96374ED9573;
     bytes32 public VaccineAwareness_Hash = '0x00aaff';
